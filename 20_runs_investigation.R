@@ -32,6 +32,10 @@ func_groups <- func_groups_output[, 2]
 
 # we want to plot from Year 0 to Year 59, like in Figure 7.1. Year 0 correspond to
 # 2018, with 2018 being the 28th year of data (chronologically)
+# Year 59 corresponds to 2077, the 87th year of data
+project_years <- 28:87
+
+total_years <- 110 # the data runs from 1991 to 2100, so 110 is # rows for each iteration
 
 # As mentioned lower down, that data for biomass need to be multiplied
 # by 570,000 for post-processing (EwE outputs give biomass in terms of
@@ -46,16 +50,17 @@ base_model_run_1_biomass_annual$Sandeels <- base_model_run_1_biomass_annual$Sand
 
 
 colnames(base_model_run_1_biomass_annual) <- c("year", func_groups)
-plot((base_model_run_1_biomass_annual$year - 2018)[28:87],
-     base_model_run_1_biomass_annual$Sandeels[28:87], type = "l",
+plot((base_model_run_1_biomass_annual$year - 2018)[project_years],
+     base_model_run_1_biomass_annual$Sandeels[project_years], type = "l",
      ylab = "Sandeel biomass, base model iteration 1",
      xlab = "Project Year")
 
 # Will try to plot all 20 iterations on the same plot to get an idea
 # of the uncertainty on the estimate of sandeel annual biomass
+n_iter <- 20
 
 dim(base_model_run_1_biomass_annual) # 110 x 70
-base_model_all_runs_biomass_annual <- vector("list", length = 20)
+base_model_all_runs_biomass_annual <- vector("list", length = n_iter)
 base_model_all_runs_biomass_annual[[1]] <- base_model_run_1_biomass_annual
 colnames(base_model_all_runs_biomass_annual[[1]]) <- c("year", func_groups)
 
@@ -73,26 +78,26 @@ for(i in 1:19){
 # since I am using a list, will need to find the minimum from each list 
 # element, then find the minimum of the minimums
 
-min_biomass_annual_sandeel_Year_0_60 <- rep(NA,20)
-max_biomass_annual_sandeel_Year_0_60 <- rep(NA,20)
-for(i in 1:20){
+min_biomass_annual_sandeel_Year_0_60 <- rep(NA, n_iter)
+max_biomass_annual_sandeel_Year_0_60 <- rep(NA, n_iter)
+for(i in 1:n_iter){
   
-  min_biomass_annual_sandeel_Year_0_60[i] <- min(base_model_all_runs_biomass_annual[[i]]$Sandeels[28:87])
-  max_biomass_annual_sandeel_Year_0_60[i] <- max(base_model_all_runs_biomass_annual[[i]]$Sandeels[28:87])
+  min_biomass_annual_sandeel_Year_0_60[i] <- min(base_model_all_runs_biomass_annual[[i]]$Sandeels[project_years])
+  max_biomass_annual_sandeel_Year_0_60[i] <- max(base_model_all_runs_biomass_annual[[i]]$Sandeels[project_years])
   
 }
 
 options(scipen=10000)
-plot((base_model_all_runs_biomass_annual[[1]]$year - 2018)[28:87],
-     base_model_all_runs_biomass_annual[[1]]$Sandeels[28:87], type = "l",
+plot((base_model_all_runs_biomass_annual[[1]]$year - 2018)[project_years],
+     base_model_all_runs_biomass_annual[[1]]$Sandeels[project_years], type = "l",
      ylab = "Sandeel biomass, base model, all 20 iterations",
      xlab = "Project Year", ylim = c(min(min_biomass_annual_sandeel_Year_0_60),
                                      max(max_biomass_annual_sandeel_Year_0_60)))
 
 for(i in 1:19){
   
-  lines((base_model_all_runs_biomass_annual[[i + 1]]$year - 2018)[28:87],
-        base_model_all_runs_biomass_annual[[i + 1]]$Sandeels[28:87])
+  lines((base_model_all_runs_biomass_annual[[i + 1]]$year - 2018)[project_years],
+        base_model_all_runs_biomass_annual[[i + 1]]$Sandeels[project_years])
   
 }
 
@@ -118,9 +123,9 @@ for(i in 1:19){
 # Note that Project Year 59 is the 87th row of the biomass matrices)
 (base_model_all_runs_biomass_annual[[1]]$year - 2018)[87] # [1] 59
 
-base_model_all_runs_biomass_year_59 <- rep(NA,20)
+base_model_all_runs_biomass_year_59 <- rep(NA, n_iter)
 
-for(i in 1:20){
+for(i in 1:n_iter){
   
   base_model_all_runs_biomass_year_59[i] <- base_model_all_runs_biomass_annual[[i]]$Sandeels[87]
   
@@ -164,31 +169,30 @@ hist(base_model_all_runs_biomass_year_59, #ylab = "Density",
 # which fish group the functional group belong, and another to represent
 # whether the fish group has a sandeel diet
 
-fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 11), NA, "pelagic", "demersal",
+fish_group_v1 <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 11), NA, "pelagic", "demersal",
                 rep(NA, 2), rep("demersal", 2), rep("pelagic", 5), "sandeel", rep("demersal", 10),
                 rep(NA, 2), rep("demersal", 2), "pelagic", "shellfish", rep(NA,4), rep("shellfish", 2),
                 rep(NA, 2), "shellfish", rep(NA, 11))
-length(fish_group)
+length(fish_group_v1)
 sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 7), rep(F, 7), rep(T, 2), rep(F, 3),
                   T, rep(F, 9), T, F, T, rep(F, 26))
 length(sandeel_diet)
 
-for(i in 1:20){
+for(i in 1:n_iter){
   
-  base_model_all_runs_biomass_annual[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], fish_group)
-  base_model_all_runs_biomass_annual[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], sandeel_diet)
+  base_model_all_runs_biomass_annual_v1[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], fish_group_v1)
+  base_model_all_runs_biomass_annual_v1[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], sandeel_diet)
 
 }
-base_model_all_runs_biomass_annual[[4]][108:113,1:9]
 
-# so, row 111 of each list element denotes whether the functional group is
+# so, row 111 (total_years + 1) of each list element denotes whether the functional group is
 # demersal, pelagic, sandeel, or shellfish, or if the group doesn't fit into
 # any of these categories, NA
 
-# row 112 denotes whether the functional group feeds on sandeel (T or F),
+# row 112 (total_years + 2) denotes whether the functional group feeds on sandeel (T or F),
 # with the year column having NA
 
-base_model_all_runs_biomass_annual[[1]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "pelagic")]
+base_model_all_runs_biomass_annual_v1[[1]][,which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1,] == "pelagic")]
 
 # sum of the rows for above matrix (excluding rows that refer to fish group and sandeel diet) will give
 # the number of pelagic fish for that year, but also need to be rescaled according to post-processing
@@ -197,68 +201,68 @@ base_model_all_runs_biomass_annual[[1]][,which(base_model_all_runs_biomass_annua
 # will do this for each element in the list, then for the mean over the list and
 # then produce some CIs over the 20 iterations for annual biomass of pelagic fish
 
-length(which(base_model_all_runs_biomass_annual[[1]][111,] == "pelagic")) # 7 pelagic species
+n_plgc_v1 <- length(which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1,] == "pelagic")) # 7 pelagic species
 
-base_model_all_runs_biomass_annual_pelagic <- vector("list", 20)
-base_model_all_runs_biomass_annual_pelagic_array <- array(NA, dim = c(110, 7, 20)) # some issues with lists and character strings, so this is a workaround
-base_model_all_runs_biomass_annual_pelagic_sum <- matrix(NA, 110, 20) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_pelagic_v1 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_pelagic_v1_array <- array(NA, dim = c(total_years, n_plgc_v1, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_pelagic_v1_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
 
 
-for(i in 1:20){
+for(i in 1:n_iter){
   
-  base_model_all_runs_biomass_annual_pelagic[[i]] <- base_model_all_runs_biomass_annual[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "pelagic")]
-  base_model_all_runs_biomass_annual_pelagic_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_pelagic[[i]][1:110, ])), 110, 7)
-  base_model_all_runs_biomass_annual_pelagic_sum[, i] <- apply(base_model_all_runs_biomass_annual_pelagic_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_pelagic_v1[[i]] <- base_model_all_runs_biomass_annual_v1[[i]][,which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1,] == "pelagic")]
+  base_model_all_runs_biomass_annual_pelagic_v1_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_pelagic_v1[[i]][1:total_years, ])), total_years, n_plgc_v1)
+  base_model_all_runs_biomass_annual_pelagic_v1_sum[, i] <- apply(base_model_all_runs_biomass_annual_pelagic_v1_array[, , i], 1, sum)
   
 }
 
 
-base_model_all_runs_biomass_annual_pelagic_sum 
+base_model_all_runs_biomass_annual_pelagic_v1_sum 
 # this is the pelagic fish biomass for each year
 # from 1991 to 2100 for each of the 20 iterations
 
 # want the mean for each year over the 20 iterations and the sd
 # in order to put confidence intervals on the plot
 
-base_model_all_runs_biomass_annual_pelagic_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_sum, 1, mean)
-base_model_all_runs_biomass_annual_pelagic_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_pelagic_sum, 1, sd)
+base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_pelagic_v1_sum, 1, sd)
 
-base_model_all_runs_biomass_annual_pelagic_20_iterations_95_lower <- base_model_all_runs_biomass_annual_pelagic_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_pelagic_20_iterations_sd
-base_model_all_runs_biomass_annual_pelagic_20_iterations_95_upper <- base_model_all_runs_biomass_annual_pelagic_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_pelagic_20_iterations_sd
+base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_lower <- base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_sd
+base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_upper <- base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_sd
 
-as.numeric(base_model_all_runs_biomass_annual[[1]]$Sandeels)[1:110]
+as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$Sandeels)[1:total_years]
 
-base_model_all_runs_biomass_annual_sandeel_20_iterations <- matrix(NA, 110, 20)
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations <- matrix(NA, total_years, n_iter)
 
-for(i in 1:20){
+for(i in 1:n_iter){
   
-  base_model_all_runs_biomass_annual_sandeel_20_iterations[, i] <- as.numeric(base_model_all_runs_biomass_annual[[i]]$Sandeels[1:110])
+  base_model_all_runs_biomass_annual_sandeel_v1_20_iterations[, i] <- as.numeric(base_model_all_runs_biomass_annual_v1[[i]]$Sandeels[1:total_years])
   
 }
 
-base_model_all_runs_biomass_annual_sandeel_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_20_iterations, 1, mean)
-base_model_all_runs_biomass_annual_sandeel_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_sandeel_20_iterations, 1, sd)
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_v1_20_iterations, 1, mean)
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_sandeel_v1_20_iterations, 1, sd)
 
-base_model_all_runs_biomass_annual_sandeel_20_iterations_95_lower <- base_model_all_runs_biomass_annual_sandeel_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_sandeel_20_iterations_sd
-base_model_all_runs_biomass_annual_sandeel_20_iterations_95_upper <- base_model_all_runs_biomass_annual_sandeel_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_sandeel_20_iterations_sd
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_lower <- base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_sd
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_upper <- base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_sd
 
 
 options(scipen=10000)
-plot((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-     base_model_all_runs_biomass_annual_sandeel_20_iterations_mean[28:87], type = "l",
+plot((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+     base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean[project_years], type = "l",
      ylab = "Annual biomass, base model",
-     xlab = "Project Year", ylim = c(min(base_model_all_runs_biomass_annual_sandeel_20_iterations_95_lower),
-                                     570000*max(base_model_all_runs_biomass_annual_pelagic_20_iterations_95_upper)))
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_95_lower[28:87], lty = 2)
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_95_upper[28:87], lty = 2)
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_mean[28:87], lty = 1, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_95_lower[28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_95_upper[28:87], lty = 2, col = "red")
+     xlab = "Project Year", ylim = c(min(base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_lower),
+                                     570000*max(base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_upper)))
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_lower[project_years], lty = 2)
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_upper[project_years], lty = 2)
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean[project_years], lty = 1, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_lower[project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_upper[project_years], lty = 2, col = "red")
 abline(h=3500000,col="grey")
 legend("right",legend = c("pelagic mean","pelagic 95% CI","sandeel mean", "sandeel 95% CI"),
        lty = c(1, 2, 1, 2), col = c(2, 2, 1, 1))
@@ -266,80 +270,80 @@ legend("right",legend = c("pelagic mean","pelagic 95% CI","sandeel mean", "sande
 # now to do the same for demersal and shellfish, plot these alongside sandeels 
 # and pelagic.
 
-length(which(base_model_all_runs_biomass_annual[[1]][111,] == "demersal")) # 29 demersal species
-length(which(base_model_all_runs_biomass_annual[[1]][111,] == "shellfish")) # 4 shellfish species
+n_dmrsl_v1 <- length(which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1, ] == "demersal")) # 29 demersal species
+n_shllfsh_v1 <- length(which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1, ] == "shellfish")) # 4 shellfish species
 
-base_model_all_runs_biomass_annual_demersal <- vector("list", 20)
-base_model_all_runs_biomass_annual_demersal_array <- array(NA, dim = c(110, 29, 20)) # some issues with lists and character strings, so this is a workaround
-base_model_all_runs_biomass_annual_demersal_sum <- matrix(NA, 110, 20) # 110 years, 20 iterations
-base_model_all_runs_biomass_annual_shellfish <- vector("list", 20)
-base_model_all_runs_biomass_annual_shellfish_array <- array(NA, dim = c(110, 4, 20)) # some issues with lists and character strings, so this is a workaround
-base_model_all_runs_biomass_annual_shellfish_sum <- matrix(NA, 110, 20) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_demersal_v1 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_demersal_v1_array <- array(NA, dim = c(total_years, n_dmrsl_v1, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_demersal_v1_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_shellfish_v1 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_shellfish_v1_array <- array(NA, dim = c(total_years, n_shllfsh_v1, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_shellfish_v1_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
 
 
-for(i in 1:20){
+for(i in 1:n_iter){
   
-  base_model_all_runs_biomass_annual_demersal[[i]] <- base_model_all_runs_biomass_annual[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "demersal")]
-  base_model_all_runs_biomass_annual_demersal_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_demersal[[i]][1:110, ])), 110, 29)
-  base_model_all_runs_biomass_annual_demersal_sum[, i] <- apply(base_model_all_runs_biomass_annual_demersal_array[, , i], 1, sum)
-  base_model_all_runs_biomass_annual_shellfish[[i]] <- base_model_all_runs_biomass_annual[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "shellfish")]
-  base_model_all_runs_biomass_annual_shellfish_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_shellfish[[i]][1:110, ])), 110, 4)
-  base_model_all_runs_biomass_annual_shellfish_sum[, i] <- apply(base_model_all_runs_biomass_annual_shellfish_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_demersal_v1[[i]] <- base_model_all_runs_biomass_annual_v1[[i]][, which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1,] == "demersal")]
+  base_model_all_runs_biomass_annual_demersal_v1_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_demersal_v1[[i]][1:total_years, ])), total_years, n_dmrsl_v1)
+  base_model_all_runs_biomass_annual_demersal_v1_sum[, i] <- apply(base_model_all_runs_biomass_annual_demersal_v1_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_shellfish_v1[[i]] <- base_model_all_runs_biomass_annual_v1[[i]][, which(base_model_all_runs_biomass_annual_v1[[1]][total_years + 1,] == "shellfish")]
+  base_model_all_runs_biomass_annual_shellfish_v1_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_shellfish_v1[[i]][1:total_years, ])), total_years, n_shllfsh_v1)
+  base_model_all_runs_biomass_annual_shellfish_v1_sum[, i] <- apply(base_model_all_runs_biomass_annual_shellfish_v1_array[, , i], 1, sum)
   
 }
 
 
-base_model_all_runs_biomass_annual_demersal_sum 
-base_model_all_runs_biomass_annual_shellfish_sum 
+base_model_all_runs_biomass_annual_demersal_v1_sum 
+base_model_all_runs_biomass_annual_shellfish_v1_sum 
 # these are the demersal fish biomass and shellfish biomass for each year
 # from 1991 to 2100 for each of the 20 iterations
 
 # want the mean for each year over the 20 iterations and the sd
 # in order to put confidence intervals on the plot
 
-base_model_all_runs_biomass_annual_demersal_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_sum, 1, mean)
-base_model_all_runs_biomass_annual_demersal_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_demersal_sum, 1, sd)
+base_model_all_runs_biomass_annual_demersal_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_demersal_v1_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_demersal_v1_sum, 1, sd)
 
-base_model_all_runs_biomass_annual_demersal_20_iterations_95_lower <- base_model_all_runs_biomass_annual_demersal_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_demersal_20_iterations_sd
-base_model_all_runs_biomass_annual_demersal_20_iterations_95_upper <- base_model_all_runs_biomass_annual_demersal_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_demersal_20_iterations_sd
+base_model_all_runs_biomass_annual_demersal_v1_20_iterations_95_lower <- base_model_all_runs_biomass_annual_demersal_v1_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_sd
+base_model_all_runs_biomass_annual_demersal_v1_20_iterations_95_upper <- base_model_all_runs_biomass_annual_demersal_v1_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_sd
 
-base_model_all_runs_biomass_annual_shellfish_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_sum, 1, mean)
-base_model_all_runs_biomass_annual_shellfish_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_shellfish_sum, 1, sd)
+base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_sd <- apply(base_model_all_runs_biomass_annual_shellfish_v1_sum, 1, sd)
 
-base_model_all_runs_biomass_annual_shellfish_20_iterations_95_lower <- base_model_all_runs_biomass_annual_shellfish_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_shellfish_20_iterations_sd
-base_model_all_runs_biomass_annual_shellfish_20_iterations_95_upper <- base_model_all_runs_biomass_annual_shellfish_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_shellfish_20_iterations_sd
+base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_95_lower <- base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_mean - 1.96*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_sd
+base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_95_upper <- base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_mean + 1.96*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_sd
 
 
 
 options(scipen=10000)
-plot((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-     base_model_all_runs_biomass_annual_sandeel_20_iterations_mean[28:87], type = "l",
+plot((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+     base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean[project_years], type = "l",
      ylab = "Annual biomass, base model", xlab = "Project Year",
-     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_20_iterations_95_lower),
-                                     570000*max(base_model_all_runs_biomass_annual_demersal_20_iterations_95_upper)),
+     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_lower),
+                                     570000*max(base_model_all_runs_biomass_annual_demersal_v1_20_iterations_95_upper)),
      col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_95_lower[28:87], lty = 2, col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_95_upper[28:87], lty = 2, col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_mean[28:87], lty = 1, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_95_lower[28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_95_upper[28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_demersal_20_iterations_mean[28:87], lty = 1, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_demersal_20_iterations_95_lower[28:87], lty = 2, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_demersal_20_iterations_95_upper[28:87], lty = 2, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_shellfish_20_iterations_mean[28:87], lty = 1, col = "orange")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_shellfish_20_iterations_95_lower[28:87], lty = 2, col = "orange")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_shellfish_20_iterations_95_upper[28:87], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_lower[project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_upper[project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean[project_years], lty = 1, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_lower[project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_95_upper[project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_mean[project_years], lty = 1, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_95_lower[project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_95_upper[project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_mean[project_years], lty = 1, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_95_lower[project_years], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_95_upper[project_years], lty = 2, col = "orange")
 
 legend(x = 0, y = 5600000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellfish"),
        col = c("blue", "green", "red", "orange"), lty = c(1, 1, 1, 1), cex = 0.7)
@@ -350,52 +354,52 @@ legend(x = 0, y = 5600000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellf
 # can just use the summary command for this
 
 
-base_model_all_runs_biomass_annual_pelagic_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_sum, 1, mean)
-base_model_all_runs_biomass_annual_pelagic_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_pelagic_sum, 1, quantile, probs = c(0.025,0.975))
+base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_pelagic_v1_sum, 1, quantile, probs = c(0.025,0.975))
 
-base_model_all_runs_biomass_annual_demersal_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_sum, 1, mean)
-base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_demersal_sum, 1, quantile, probs = c(0.025,0.975))
+base_model_all_runs_biomass_annual_demersal_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_demersal_v1_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_demersal_v1_sum, 1, quantile, probs = c(0.025,0.975))
 
-base_model_all_runs_biomass_annual_shellfish_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_sum, 1, mean)
-base_model_all_runs_biomass_annual_shellfish_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_shellfish_sum, 1, quantile, probs = c(0.025,0.975))
+base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_shellfish_v1_sum, 1, quantile, probs = c(0.025,0.975))
 
-base_model_all_runs_biomass_annual_sandeel_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_sum, 1, mean)
-base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_sandeel_20_iterations, 1, quantile, probs = c(0.025,0.975))
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_v1_sum, 1, mean)
+base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_sandeel_v1_20_iterations, 1, quantile, probs = c(0.025,0.975))
 
 options(scipen=10000)
-plot((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-     base_model_all_runs_biomass_annual_sandeel_20_iterations_mean[28:87], type = "l",
+plot((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+     base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_mean[project_years], type = "l",
      ylab = "Annual biomass, base model", xlab = "Project Year",
-     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_20_iterations_95_lower[28:87]),
-              570000*max(base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles[2,28:87])),
+     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_95_lower[project_years]),
+              570000*max(base_model_all_runs_biomass_annual_demersal_v1_20_iterations_5_95_quantiles[2,project_years])),
      col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_mean[28:87], lty = 1, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_pelagic_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_demersal_20_iterations_mean[28:87], lty = 1, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_shellfish_20_iterations_mean[28:87], lty = 1, col = "orange")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_shellfish_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "orange")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year) - 2018)[28:87],
-      570000*base_model_all_runs_biomass_annual_shellfish_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v1_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_mean[project_years], lty = 1, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_pelagic_v1_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_mean[project_years], lty = 1, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_demersal_v1_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_mean[project_years], lty = 1, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v1[[1]]$year) - 2018)[project_years],
+      570000*base_model_all_runs_biomass_annual_shellfish_v1_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "orange")
 
 legend(x = 0, y = 5600000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellfish"),
        col = c("blue", "green", "red", "orange"), lty = c(1, 1, 1, 1), cex = 0.7)
 
-base_model_all_runs_biomass_annual[[1]]$Spurdog[1]
+base_model_all_runs_biomass_annual_v1[[1]]$Spurdog[1]
 
 
 # one noticeable thing so far --- the estimates of annual biomass for pelagic and demersal
@@ -427,11 +431,11 @@ fish_group_v2 <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 11), NA, 
 base_model_run_1_biomass_annual <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Base_model\\biomass_annual.csv",
                                             skip = 9)
 base_model_run_1_biomass_annual[,-1] <- base_model_run_1_biomass_annual[,-1] * 570000
-base_model_all_runs_biomass_annual <- vector("list", length = 20)
-base_model_all_runs_biomass_annual[[1]] <- base_model_run_1_biomass_annual
-colnames(base_model_all_runs_biomass_annual[[1]]) <- c("year", func_groups)
+base_model_all_runs_biomass_annual_v2 <- vector("list", length = n_iter)
+base_model_all_runs_biomass_annual_v2[[1]] <- base_model_run_1_biomass_annual
+colnames(base_model_all_runs_biomass_annual_v2[[1]]) <- c("year", func_groups)
 
-for(i in 1:19){
+for(i in 1:(n_iter - 1)){
   
   base_model_all_runs_biomass_annual[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Run_",i,"\\biomass_annual.csv"),
                                                           skip = 9)
@@ -440,86 +444,86 @@ for(i in 1:19){
   
 }
 
-for(i in 1:20){
+for(i in 1:n_iter){
   
-  base_model_all_runs_biomass_annual[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], fish_group_v2)
-  base_model_all_runs_biomass_annual[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], sandeel_diet)
-  
-}
-
-length(which(base_model_all_runs_biomass_annual[[1]][111,] == "demersal")) # 27 demersal species
-length(which(base_model_all_runs_biomass_annual[[1]][111,] == "pelagic")) # 6 pelagic species
-
-base_model_all_runs_biomass_annual_demersal <- vector("list", 20)
-base_model_all_runs_biomass_annual_demersal_array <- array(NA, dim = c(110, 27, 20)) # some issues with lists and character strings, so this is a workaround
-base_model_all_runs_biomass_annual_demersal_sum <- matrix(NA, 110, 20) # 110 years, 20 iterations
-base_model_all_runs_biomass_annual_pelagic <- vector("list", 20)
-base_model_all_runs_biomass_annual_pelagic_array <- array(NA, dim = c(110, 6, 20)) # some issues with lists and character strings, so this is a workaround
-base_model_all_runs_biomass_annual_pelagic_sum <- matrix(NA, 110, 20) # 110 years, 20 iterations
-base_model_all_runs_biomass_annual_shellfish <- vector("list", 20)
-base_model_all_runs_biomass_annual_shellfish_array <- array(NA, dim = c(110, 4, 20)) # some issues with lists and character strings, so this is a workaround
-base_model_all_runs_biomass_annual_shellfish_sum <- matrix(NA, 110, 20) # 110 years, 20 iterations
-base_model_all_runs_biomass_annual_sandeel_20_iterations <- matrix(NA, 110, 20)
-
-for(i in 1:20){
-  
-  base_model_all_runs_biomass_annual_demersal[[i]] <- base_model_all_runs_biomass_annual[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "demersal")]
-  base_model_all_runs_biomass_annual_demersal_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_demersal[[i]][1:110, ])), 110, 27)
-  base_model_all_runs_biomass_annual_demersal_sum[, i] <- apply(base_model_all_runs_biomass_annual_demersal_array[, , i], 1, sum)
-  base_model_all_runs_biomass_annual_pelagic[[i]] <- base_model_all_runs_biomass_annual[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "pelagic")]
-  base_model_all_runs_biomass_annual_pelagic_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_pelagic[[i]][1:110, ])), 110, 6)
-  base_model_all_runs_biomass_annual_pelagic_sum[, i] <- apply(base_model_all_runs_biomass_annual_pelagic_array[, , i], 1, sum)
-  base_model_all_runs_biomass_annual_shellfish[[i]] <- base_model_all_runs_biomass_annual[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "shellfish")]
-  base_model_all_runs_biomass_annual_shellfish_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_shellfish[[i]][1:110, ])), 110, 4)
-  base_model_all_runs_biomass_annual_shellfish_sum[, i] <- apply(base_model_all_runs_biomass_annual_shellfish_array[, , i], 1, sum)
-  base_model_all_runs_biomass_annual_sandeel_20_iterations[, i] <- as.numeric(base_model_all_runs_biomass_annual[[i]]$Sandeels[1:110])
+  base_model_all_runs_biomass_annual_v2[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], fish_group_v2)
+  base_model_all_runs_biomass_annual_v2[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], sandeel_diet)
   
 }
 
+n_dmrsl_v2 <- length(which(base_model_all_runs_biomass_annual_v2[[1]][111,] == "demersal")) # 27 demersal species
+n_plgc_v2 <- length(which(base_model_all_runs_biomass_annual_v2[[1]][111,] == "pelagic")) # 6 pelagic species
 
-base_model_all_runs_biomass_annual_pelagic_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_sum, 1, mean)
-base_model_all_runs_biomass_annual_pelagic_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_pelagic_sum, 1, quantile, probs = c(0.025,0.975))
+base_model_all_runs_biomass_annual_demersal_v2 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_demersal_v2_array <- array(NA, dim = c(total_years, n_dmrsl_v2, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_demersal_v2_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_pelagic_v2 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_pelagic_v2_array <- array(NA, dim = c(total_years, n_plgc_v2, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_pelagic_v2_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_shellfish_v2 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_shellfish_v2_array <- array(NA, dim = c(total_years, n_shllfsh, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_shellfish_v2_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_sandeel_v2_20_iterations <- matrix(NA, total_years, n_iter)
 
-base_model_all_runs_biomass_annual_demersal_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_sum, 1, mean)
-base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_demersal_sum, 1, quantile, probs = c(0.025,0.975))
+for(i in 1:n_iter){
+  
+  base_model_all_runs_biomass_annual_demersal_v2[[i]] <- base_model_all_runs_biomass_annual_v2[[i]][,which(base_model_all_runs_biomass_annual_v2[[1]][111,] == "demersal")]
+  base_model_all_runs_biomass_annual_demersal_v2_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_demersal_v2[[i]][1:total_years, ])), total_years, n_dmrsl_v2)
+  base_model_all_runs_biomass_annual_demersal_v2_sum[, i] <- apply(base_model_all_runs_biomass_annual_demersal_v2_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_pelagic_v2[[i]] <- base_model_all_runs_biomass_annual_v2[[i]][,which(base_model_all_runs_biomass_annual_v2[[1]][111,] == "pelagic")]
+  base_model_all_runs_biomass_annual_pelagic_v2_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_pelagic_v2[[i]][1:total_years, ])), total_years, n_plgc_v2)
+  base_model_all_runs_biomass_annual_pelagic_v2_sum[, i] <- apply(base_model_all_runs_biomass_annual_pelagic_v2_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_shellfish_v2[[i]] <- base_model_all_runs_biomass_annual_v2[[i]][,which(base_model_all_runs_biomass_annual[[1]][111,] == "shellfish")]
+  base_model_all_runs_biomass_annual_shellfish_v2_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_shellfish_v2[[i]][1:total_years, ])), total_years, n_shllfsh)
+  base_model_all_runs_biomass_annual_shellfish_v2_sum[, i] <- apply(base_model_all_runs_biomass_annual_shellfish_v2_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_sandeel_v2_20_iterations[, i] <- as.numeric(base_model_all_runs_biomass_annual_v2[[i]]$Sandeels[1:total_years])
+  
+}
 
-base_model_all_runs_biomass_annual_shellfish_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_sum, 1, mean)
-base_model_all_runs_biomass_annual_shellfish_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_shellfish_sum, 1, quantile, probs = c(0.025,0.975))
 
-base_model_all_runs_biomass_annual_sandeel_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_20_iterations, 1, mean)
-base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_sandeel_20_iterations, 1, quantile, probs = c(0.025,0.975))
+base_model_all_runs_biomass_annual_pelagic_v2_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_v2_sum, 1, mean)
+base_model_all_runs_biomass_annual_pelagic_v2_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_pelagic_v2_sum, 1, quantile, probs = c(0.025,0.975))
+
+base_model_all_runs_biomass_annual_demersal_v2_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_v2_sum, 1, mean)
+base_model_all_runs_biomass_annual_demersal_v2_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_demersal_v2_sum, 1, quantile, probs = c(0.025,0.975))
+
+base_model_all_runs_biomass_annual_shellfish_v2_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_v2_sum, 1, mean)
+base_model_all_runs_biomass_annual_shellfish_v2_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_shellfish_v2_sum, 1, quantile, probs = c(0.025,0.975))
+
+base_model_all_runs_biomass_annual_sandeel_v2_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_v2_20_iterations, 1, mean)
+base_model_all_runs_biomass_annual_sandeel_v2_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_sandeel_v2_20_iterations, 1, quantile, probs = c(0.025,0.975))
 
 options(scipen=10000)
-plot((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-     base_model_all_runs_biomass_annual_sandeel_20_iterations_mean[28:87], type = "l",
+plot((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+     base_model_all_runs_biomass_annual_sandeel_v2_20_iterations_mean[project_years], type = "l",
      ylab = "Annual biomass, base model", xlab = "Project Year",
-     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles[1,28:87]),
-              max(base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles[2,28:87])),
+     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_v2_20_iterations_5_95_quantiles[1,project_years]),
+              max(base_model_all_runs_biomass_annual_demersal_v2_20_iterations_5_95_quantiles[2,project_years])),
      col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_sandeel_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "blue")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_pelagic_20_iterations_mean[28:87], lty = 1, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_pelagic_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_pelagic_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "red")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_demersal_20_iterations_mean[28:87], lty = 1, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_demersal_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "green")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_shellfish_20_iterations_mean[28:87], lty = 1, col = "orange")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_shellfish_20_iterations_5_95_quantiles[1,28:87], lty = 2, col = "orange")
-lines((as.numeric(base_model_all_runs_biomass_annual[[1]]$year[1:110]) - 2018)[28:87],
-      base_model_all_runs_biomass_annual_shellfish_20_iterations_5_95_quantiles[2,28:87], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v2_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v2_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_pelagic_v2_20_iterations_mean[project_years], lty = 1, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_pelagic_v2_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_pelagic_v2_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_demersal_v2_20_iterations_mean[project_years], lty = 1, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_demersal_v2_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_demersal_v2_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_shellfish_v2_20_iterations_mean[project_years], lty = 1, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_shellfish_v2_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v2[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_shellfish_v2_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "orange")
 
-legend(x = 0, y = 5600000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellfish"),
+legend(x = 0, y = 5300000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellfish"),
        col = c("blue", "green", "red", "orange"), lty = c(1, 1, 1, 1), cex = 0.7)
 
 
@@ -527,3 +531,111 @@ legend(x = 0, y = 5600000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellf
 # on Thursday, including only the adult subgroups where applicable (for example cod)
 # and ignore the juvenile subgroups, and see if these numbers compare better
 # for the pelagic and demersal fish groups.
+
+# Doing the above suggestion now
+
+fish_group_v3 <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 3), NA, "demersal",
+                   NA, "demersal", NA, "demersal", NA, "demersal", NA, "pelagic", "demersal",
+                   rep(NA, 2), rep("demersal", 2), NA, rep("pelagic", 4), "sandeel", rep("demersal", 10),
+                   rep(NA, 5), "shellfish", rep(NA,4), rep("shellfish", 2),
+                   rep(NA, 2), "shellfish", rep(NA, 11))
+
+base_model_run_1_biomass_annual <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Base_model\\biomass_annual.csv",
+                                            skip = 9)
+base_model_run_1_biomass_annual[,-1] <- base_model_run_1_biomass_annual[,-1] * 570000 # adjusting biomass values from tonnes/km^2 to tonnes
+base_model_all_runs_biomass_annual <- vector("list", length = n_iter) # storing all 20 iterations
+base_model_all_runs_biomass_annual[[1]] <- base_model_run_1_biomass_annual # storing the first run in the list (it is called something different)
+colnames(base_model_all_runs_biomass_annual[[1]]) <- c("year", func_groups) # first column of list is the year, all other columns are the functional group names
+
+for(i in 1:(n_iter - 1)){
+  
+  base_model_all_runs_biomass_annual[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Run_",i,"\\biomass_annual.csv"),
+                                                          skip = 9)
+  colnames(base_model_all_runs_biomass_annual[[i + 1]]) <- c("year", func_groups)
+  base_model_all_runs_biomass_annual[[i + 1]][,-1] <- base_model_all_runs_biomass_annual[[i + 1]][,-1] * 570000
+  
+}
+
+for(i in 1:n_iter){ # including the fish groups and sandeel diets factor variables to the elements in list
+  
+  base_model_all_runs_biomass_annual_v3[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], fish_group_v3)
+  base_model_all_runs_biomass_annual_v3[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], sandeel_diet)
+  
+}
+
+n_dmrsl_v3 <- length(which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "demersal")) # 23 demersal species
+n_plgc_v3 <- length(which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "pelagic")) # 5 pelagic species
+n_sndl_v3 <- length(which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "sandeel")) # 1 sandeel species
+n_shllfsh_v3 <- length(which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "shellfish")) # 4 shellfish species
+
+base_model_all_runs_biomass_annual_demersal_v3 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_demersal_v3_array <- array(NA, dim = c(total_years, n_dmrsl_v3, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_demersal_v3_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_pelagic_v3 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_pelagic_v3_array <- array(NA, dim = c(total_years, n_plgc_v3, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_pelagic_v3_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_shellfish_v3 <- vector("list", n_iter)
+base_model_all_runs_biomass_annual_shellfish_v3_array <- array(NA, dim = c(total_years, n_shllfsh_v3, n_iter)) # some issues with lists and character strings, so this is a workaround
+base_model_all_runs_biomass_annual_shellfish_v3_sum <- matrix(NA, total_years, n_iter) # 110 years, 20 iterations
+base_model_all_runs_biomass_annual_sandeel_v3_20_iterations <- matrix(NA, total_years, n_iter)
+
+for(i in 1:n_iter){
+  
+  base_model_all_runs_biomass_annual_demersal_v3[[i]] <- base_model_all_runs_biomass_annual_v3[[i]][,which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "demersal")]
+  base_model_all_runs_biomass_annual_demersal_v3_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_demersal_v3[[i]][1:total_years, ])), total_years, n_dmrsl_v3)
+  base_model_all_runs_biomass_annual_demersal_v3_sum[, i] <- apply(base_model_all_runs_biomass_annual_demersal_v3_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_pelagic_v3[[i]] <- base_model_all_runs_biomass_annual_v3[[i]][,which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "pelagic")]
+  base_model_all_runs_biomass_annual_pelagic_v3_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_pelagic_v3[[i]][1:total_years, ])), total_years, n_plgc_v3)
+  base_model_all_runs_biomass_annual_pelagic_v3_sum[, i] <- apply(base_model_all_runs_biomass_annual_pelagic_v3_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_shellfish_v3[[i]] <- base_model_all_runs_biomass_annual_v3[[i]][,which(base_model_all_runs_biomass_annual_v3[[1]][111,] == "shellfish")]
+  base_model_all_runs_biomass_annual_shellfish_v3_array[, , i] <- matrix(as.numeric(as.matrix(base_model_all_runs_biomass_annual_shellfish_v3[[i]][1:total_years, ])), total_years, n_shllfsh_v3)
+  base_model_all_runs_biomass_annual_shellfish_v3_sum[, i] <- apply(base_model_all_runs_biomass_annual_shellfish_v3_array[, , i], 1, sum)
+  base_model_all_runs_biomass_annual_sandeel_v3_20_iterations[, i] <- as.numeric(base_model_all_runs_biomass_annual_v3[[i]]$Sandeels[1:total_years])
+  
+}
+
+
+base_model_all_runs_biomass_annual_pelagic_v3_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_pelagic_v3_sum, 1, mean)
+base_model_all_runs_biomass_annual_pelagic_v3_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_pelagic_v3_sum, 1, quantile, probs = c(0.025,0.975))
+
+base_model_all_runs_biomass_annual_demersal_v3_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_demersal_v3_sum, 1, mean)
+base_model_all_runs_biomass_annual_demersal_v3_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_demersal_v3_sum, 1, quantile, probs = c(0.025,0.975))
+
+base_model_all_runs_biomass_annual_shellfish_v3_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_shellfish_v3_sum, 1, mean)
+base_model_all_runs_biomass_annual_shellfish_v3_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_shellfish_v3_sum, 1, quantile, probs = c(0.025,0.975))
+
+base_model_all_runs_biomass_annual_sandeel_v3_20_iterations_mean <- apply(base_model_all_runs_biomass_annual_sandeel_v3_20_iterations, 1, mean)
+base_model_all_runs_biomass_annual_sandeel_v3_20_iterations_5_95_quantiles <- apply(base_model_all_runs_biomass_annual_sandeel_v3_20_iterations, 1, quantile, probs = c(0.025,0.975))
+
+options(scipen=10000)
+plot((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+     base_model_all_runs_biomass_annual_sandeel_v3_20_iterations_mean[project_years], type = "l",
+     ylab = "Annual biomass, base model", xlab = "Project Year",
+     ylim = c(min(base_model_all_runs_biomass_annual_sandeel_v3_20_iterations_5_95_quantiles[1,project_years]),
+              max(base_model_all_runs_biomass_annual_demersal_v3_20_iterations_5_95_quantiles[2,project_years])),
+     col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v3_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_sandeel_v3_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "blue")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_pelagic_v3_20_iterations_mean[project_years], lty = 1, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_pelagic_v3_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_pelagic_v3_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "red")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_demersal_v3_20_iterations_mean[project_years], lty = 1, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_demersal_v3_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_demersal_v3_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "green")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_shellfish_v3_20_iterations_mean[project_years], lty = 1, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_shellfish_v3_20_iterations_5_95_quantiles[1,project_years], lty = 2, col = "orange")
+lines((as.numeric(base_model_all_runs_biomass_annual_v3[[1]]$year[1:total_years]) - 2018)[project_years],
+      base_model_all_runs_biomass_annual_shellfish_v3_20_iterations_5_95_quantiles[2,project_years], lty = 2, col = "orange")
+
+legend(x = 0, y = 5100000, legend = c("Sandeels", "Demersal", "Pelagic", "Shellfish"),
+       col = c("blue", "green", "red", "orange"), lty = c(1, 1, 1, 1), cex = 0.7)
