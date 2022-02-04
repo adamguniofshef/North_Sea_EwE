@@ -182,3 +182,7 @@ round(NC_ecosystem_service_mean + 1.96 * NC_ecosystem_service_sd)
 
 NC_benefits_and_values_mean - 1.96 * NC_benefits_and_values_sd
 round(NC_benefits_and_values_mean + 1.96 * NC_benefits_and_values_sd)
+
+round(NC_asset_baseline_2.5_97.5_quantiles)
+round(NC_ecosystem_service_2.5_97.5_quantiles)
+round(NC_benefits_and_values_2.5_97.5_quantiles)

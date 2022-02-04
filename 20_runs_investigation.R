@@ -46,10 +46,12 @@ total_years <- 110 # the data runs from 1991 to 2100, so 110 is # rows for each 
 
 # UPDATE 18/01 --- confident this is true for all species, so will does this for all data
 
-base_model_run_1_biomass_annual$Sandeels <- base_model_run_1_biomass_annual$Sandeels * 570000
+
 
 
 colnames(base_model_run_1_biomass_annual) <- c("year", func_groups)
+base_model_run_1_biomass_annual$Sandeels <- base_model_run_1_biomass_annual$Sandeels * 570000
+
 plot((base_model_run_1_biomass_annual$year - 2018)[project_years],
      base_model_run_1_biomass_annual$Sandeels[project_years], type = "l",
      ylab = "Sandeel biomass, base model iteration 1",
@@ -540,26 +542,26 @@ fish_group_v3 <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 3), NA, "
                    rep(NA, 5), "shellfish", rep(NA,4), rep("shellfish", 2),
                    rep(NA, 2), "shellfish", rep(NA, 11))
 
-base_model_run_1_biomass_annual <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Base_model\\biomass_annual.csv",
+base_model_run_1_biomass_annual_v3 <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Base_model\\biomass_annual.csv",
                                             skip = 9)
-base_model_run_1_biomass_annual[,-1] <- base_model_run_1_biomass_annual[,-1] * 570000 # adjusting biomass values from tonnes/km^2 to tonnes
-base_model_all_runs_biomass_annual <- vector("list", length = n_iter) # storing all 20 iterations
-base_model_all_runs_biomass_annual[[1]] <- base_model_run_1_biomass_annual # storing the first run in the list (it is called something different)
-colnames(base_model_all_runs_biomass_annual[[1]]) <- c("year", func_groups) # first column of list is the year, all other columns are the functional group names
+base_model_run_1_biomass_annual_v3[,-1] <- base_model_run_1_biomass_annual_v3[,-1] * 570000 # adjusting biomass values from tonnes/km^2 to tonnes
+base_model_all_runs_biomass_annual_v3 <- vector("list", length = n_iter) # storing all 20 iterations
+base_model_all_runs_biomass_annual_v3[[1]] <- base_model_run_1_biomass_annual_v3 # storing the first run in the list (it is called something different)
+colnames(base_model_all_runs_biomass_annual_v3[[1]]) <- c("year", func_groups) # first column of list is the year, all other columns are the functional group names
 
 for(i in 1:(n_iter - 1)){
   
-  base_model_all_runs_biomass_annual[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Run_",i,"\\biomass_annual.csv"),
+  base_model_all_runs_biomass_annual_v3[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Run_",i,"\\biomass_annual.csv"),
                                                           skip = 9)
-  colnames(base_model_all_runs_biomass_annual[[i + 1]]) <- c("year", func_groups)
-  base_model_all_runs_biomass_annual[[i + 1]][,-1] <- base_model_all_runs_biomass_annual[[i + 1]][,-1] * 570000
+  colnames(base_model_all_runs_biomass_annual_v3[[i + 1]]) <- c("year", func_groups)
+  base_model_all_runs_biomass_annual_v3[[i + 1]][,-1] <- base_model_all_runs_biomass_annual_v3[[i + 1]][,-1] * 570000
   
 }
 
 for(i in 1:n_iter){ # including the fish groups and sandeel diets factor variables to the elements in list
   
-  base_model_all_runs_biomass_annual_v3[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], fish_group_v3)
-  base_model_all_runs_biomass_annual_v3[[i]] <- rbind(base_model_all_runs_biomass_annual[[i]], sandeel_diet)
+  base_model_all_runs_biomass_annual_v3[[i]] <- rbind(base_model_all_runs_biomass_annual_v3[[i]], fish_group_v3)
+  base_model_all_runs_biomass_annual_v3[[i]] <- rbind(base_model_all_runs_biomass_annual_v3[[i]], sandeel_diet)
   
 }
 

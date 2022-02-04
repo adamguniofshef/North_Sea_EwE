@@ -12,5 +12,15 @@ library(mizer)
 # or default parameters.
 params <- newMultispeciesParams(NS_species_params, NS_interaction)
 
+# second line runs the size spectrum model simulation
+# returns an object of type MizerSim, which can be further 
+# explored with summary, indicator and plotting functions,
+# as in line 3
 sim <- project(params, t_max = 10, effort = 0)
 plot(sim)
+
+# using different function for setting model parameters
+
+params_community <- newCommunityParams()
+sim_community <- project(params_community, t_max = 10, effort = 0)
+plot(sim_community)
