@@ -3,122 +3,197 @@
 
 # trying to automate the process as much as possible
 
-North_Sea_EwE_data <- function(output, n_iter = 40, total_years = 110, project_years = 28:87, amalgamate = T){
+North_Sea_EwE_data <- function(output, n_iter = 40, total_years = 110, project_years = 28:87, amalgamate = T,
+                               all_scenarios = T){
   
   # outputs we have considered: "biomass_annual", "catch_annual"
-  
-  func_groups_output <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\Previous report\\NorthSea_EwE_basic_estimates_functional_groups.csv")
-  func_groups_output <- func_groups_output[!is.na(func_groups_output[, 1]), ]
-  func_groups <- func_groups_output[, 2]
-  
-  data_MSY <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_MSY\\Sample_baseline\\ecosim_Basic setup\\", output, ".csv"),
-                                                      skip = 9)
-  data_half_MSY <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_half_MSY\\Sample_baseline\\ecosim_Basic setup\\", output, ".csv"),
-                       skip = 9)
-  data_no_F <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_no_F\\Sample_baseline\\ecosim_Basic setup\\", output, ".csv"),
-                       skip = 9)
-  data_MSY[,-1] <- data_MSY[,-1] * 570000 # for both catch and biomass, the data need to be rescaled by area of North Sea considered, 570000km^2
-  data_half_MSY[,-1] <- data_half_MSY[,-1] * 570000
-  data_no_F[,-1] <- data_no_F[,-1] * 570000
-  data_list_MSY <- vector("list", length = n_iter)
-  data_list_half_MSY <- vector("list", length = n_iter)
-  data_list_no_F <- vector("list", length = n_iter)
-  data_list_MSY[[1]] <- data_MSY
-  data_list_half_MSY[[1]] <- data_half_MSY
-  data_list_no_F[[1]] <- data_no_F
-  colnames(data_list_MSY[[1]]) <- c("year", func_groups)
-  colnames(data_list_half_MSY[[1]]) <- c("year", func_groups)
-  colnames(data_list_no_F[[1]]) <- c("year", func_groups)
-  
-  for(i in 1:(n_iter - 1)){
+  if(all_scenarios){
     
-    data_list_MSY[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_MSY\\Sample_", i, "\\ecosim_Basic setup\\", output, ".csv"),
-                                                               skip = 9)
-    colnames(data_list_MSY[[i + 1]]) <- c("year", func_groups)
-    data_list_MSY[[i + 1]][,-1] <- data_list_MSY[[i + 1]][,-1] * 570000
+    func_groups_output <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\Previous report\\NorthSea_EwE_basic_estimates_functional_groups.csv")
+    func_groups_output <- func_groups_output[!is.na(func_groups_output[, 1]), ]
+    func_groups <- func_groups_output[, 2]
     
-    data_list_half_MSY[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_half_MSY\\Sample_", i, "\\ecosim_Basic setup\\", output, ".csv"),
-                                       skip = 9)
-    colnames(data_list_half_MSY[[i + 1]]) <- c("year", func_groups)
-    data_list_half_MSY[[i + 1]][,-1] <- data_list_half_MSY[[i + 1]][,-1] * 570000
+    data_MSY <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_MSY\\Sample_baseline\\ecosim_Basic setup\\", output, ".csv"),
+                         skip = 9)
+    data_half_MSY <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_half_MSY\\Sample_baseline\\ecosim_Basic setup\\", output, ".csv"),
+                              skip = 9)
+    data_no_F <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_no_F\\Sample_baseline\\ecosim_Basic setup\\", output, ".csv"),
+                          skip = 9)
+    data_MSY[,-1] <- data_MSY[,-1] * 570000 # for both catch and biomass, the data need to be rescaled by area of North Sea considered, 570000km^2
+    data_half_MSY[,-1] <- data_half_MSY[,-1] * 570000
+    data_no_F[,-1] <- data_no_F[,-1] * 570000
+    data_list_MSY <- vector("list", length = n_iter)
+    data_list_half_MSY <- vector("list", length = n_iter)
+    data_list_no_F <- vector("list", length = n_iter)
+    data_list_MSY[[1]] <- data_MSY
+    data_list_half_MSY[[1]] <- data_half_MSY
+    data_list_no_F[[1]] <- data_no_F
+    colnames(data_list_MSY[[1]]) <- c("year", func_groups)
+    colnames(data_list_half_MSY[[1]]) <- c("year", func_groups)
+    colnames(data_list_no_F[[1]]) <- c("year", func_groups)
     
-    data_list_no_F[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_no_F\\Sample_", i, "\\ecosim_Basic setup\\", output, ".csv"),
-                                       skip = 9)
-    colnames(data_list_no_F[[i + 1]]) <- c("year", func_groups)
-    data_list_no_F[[i + 1]][,-1] <- data_list_no_F[[i + 1]][,-1] * 570000
-    
-  }
-  
-  if(amalgamate){ # want to combine some functional groups given split into juvenile and adult 
-    
-    # want 13+14, 15+16, 17+18, 19+20, 28+29. remember column 1 is year, so need to add on one to each column
-    for(i in 1:n_iter){
+    for(i in 1:(n_iter - 1)){
       
-      data_list_MSY[[i]][, 14] <- data_list_MSY[[i]][, 14] + data_list_MSY[[i]][, 15]
-      data_list_MSY[[i]][, 16] <- data_list_MSY[[i]][, 16] + data_list_MSY[[i]][, 17]
-      data_list_MSY[[i]][, 18] <- data_list_MSY[[i]][, 18] + data_list_MSY[[i]][, 19]
-      data_list_MSY[[i]][, 20] <- data_list_MSY[[i]][, 20] + data_list_MSY[[i]][, 21]
-      data_list_MSY[[i]][, 29] <- data_list_MSY[[i]][, 29] + data_list_MSY[[i]][, 30]
-      colnames(data_list_MSY[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
-      data_list_MSY[[i]] <- data_list_MSY[[i]][, -c(15, 17, 19, 21, 30)]
+      data_list_MSY[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_MSY\\Sample_", i, "\\ecosim_Basic setup\\", output, ".csv"),
+                                         skip = 9)
+      colnames(data_list_MSY[[i + 1]]) <- c("year", func_groups)
+      data_list_MSY[[i + 1]][,-1] <- data_list_MSY[[i + 1]][,-1] * 570000
       
-      data_list_half_MSY[[i]][, 14] <- data_list_half_MSY[[i]][, 14] + data_list_half_MSY[[i]][, 15]
-      data_list_half_MSY[[i]][, 16] <- data_list_half_MSY[[i]][, 16] + data_list_half_MSY[[i]][, 17]
-      data_list_half_MSY[[i]][, 18] <- data_list_half_MSY[[i]][, 18] + data_list_half_MSY[[i]][, 19]
-      data_list_half_MSY[[i]][, 20] <- data_list_half_MSY[[i]][, 20] + data_list_half_MSY[[i]][, 21]
-      data_list_half_MSY[[i]][, 29] <- data_list_half_MSY[[i]][, 29] + data_list_half_MSY[[i]][, 30]
-      colnames(data_list_half_MSY[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
-      data_list_half_MSY[[i]] <- data_list_half_MSY[[i]][, -c(15, 17, 19, 21, 30)]
+      data_list_half_MSY[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_half_MSY\\Sample_", i, "\\ecosim_Basic setup\\", output, ".csv"),
+                                              skip = 9)
+      colnames(data_list_half_MSY[[i + 1]]) <- c("year", func_groups)
+      data_list_half_MSY[[i + 1]][,-1] <- data_list_half_MSY[[i + 1]][,-1] * 570000
       
-      data_list_no_F[[i]][, 14] <- data_list_no_F[[i]][, 14] + data_list_no_F[[i]][, 15]
-      data_list_no_F[[i]][, 16] <- data_list_no_F[[i]][, 16] + data_list_no_F[[i]][, 17]
-      data_list_no_F[[i]][, 18] <- data_list_no_F[[i]][, 18] + data_list_no_F[[i]][, 19]
-      data_list_no_F[[i]][, 20] <- data_list_no_F[[i]][, 20] + data_list_no_F[[i]][, 21]
-      data_list_no_F[[i]][, 29] <- data_list_no_F[[i]][, 29] + data_list_no_F[[i]][, 30]
-      colnames(data_list_no_F[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
-      data_list_no_F[[i]] <- data_list_no_F[[i]][, -c(15, 17, 19, 21, 30)]
+      data_list_no_F[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_3_scenarios\\NSea_sandeel_no_F\\Sample_", i, "\\ecosim_Basic setup\\", output, ".csv"),
+                                          skip = 9)
+      colnames(data_list_no_F[[i + 1]]) <- c("year", func_groups)
+      data_list_no_F[[i + 1]][,-1] <- data_list_no_F[[i + 1]][,-1] * 570000
       
     }
     
-    fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 7), NA, "pelagic", "demersal",
-                    rep(NA, 2), rep("demersal", 2), rep("pelagic", 4), "sandeel", rep("demersal", 10),
-                    rep(NA, 2),
-                    #rep("demersal", 2), "pelagic",
-                    rep(NA,3),
-                    "shellfish", rep(NA,4), rep("shellfish", 2),
-                    rep(NA, 2), "shellfish", rep(NA, 11))
-    sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 4), rep(F, 6), rep(T, 2), rep(F, 2),
-                      T, rep(F, 9), T, F, T, rep(F, 26))
+    if(amalgamate){ # want to combine some functional groups given split into juvenile and adult 
+      
+      # want 13+14, 15+16, 17+18, 19+20, 28+29. remember column 1 is year, so need to add on one to each column
+      for(i in 1:n_iter){
+        
+        data_list_MSY[[i]][, 14] <- data_list_MSY[[i]][, 14] + data_list_MSY[[i]][, 15]
+        data_list_MSY[[i]][, 16] <- data_list_MSY[[i]][, 16] + data_list_MSY[[i]][, 17]
+        data_list_MSY[[i]][, 18] <- data_list_MSY[[i]][, 18] + data_list_MSY[[i]][, 19]
+        data_list_MSY[[i]][, 20] <- data_list_MSY[[i]][, 20] + data_list_MSY[[i]][, 21]
+        data_list_MSY[[i]][, 29] <- data_list_MSY[[i]][, 29] + data_list_MSY[[i]][, 30]
+        colnames(data_list_MSY[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
+        data_list_MSY[[i]] <- data_list_MSY[[i]][, -c(15, 17, 19, 21, 30)]
+        
+        data_list_half_MSY[[i]][, 14] <- data_list_half_MSY[[i]][, 14] + data_list_half_MSY[[i]][, 15]
+        data_list_half_MSY[[i]][, 16] <- data_list_half_MSY[[i]][, 16] + data_list_half_MSY[[i]][, 17]
+        data_list_half_MSY[[i]][, 18] <- data_list_half_MSY[[i]][, 18] + data_list_half_MSY[[i]][, 19]
+        data_list_half_MSY[[i]][, 20] <- data_list_half_MSY[[i]][, 20] + data_list_half_MSY[[i]][, 21]
+        data_list_half_MSY[[i]][, 29] <- data_list_half_MSY[[i]][, 29] + data_list_half_MSY[[i]][, 30]
+        colnames(data_list_half_MSY[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
+        data_list_half_MSY[[i]] <- data_list_half_MSY[[i]][, -c(15, 17, 19, 21, 30)]
+        
+        data_list_no_F[[i]][, 14] <- data_list_no_F[[i]][, 14] + data_list_no_F[[i]][, 15]
+        data_list_no_F[[i]][, 16] <- data_list_no_F[[i]][, 16] + data_list_no_F[[i]][, 17]
+        data_list_no_F[[i]][, 18] <- data_list_no_F[[i]][, 18] + data_list_no_F[[i]][, 19]
+        data_list_no_F[[i]][, 20] <- data_list_no_F[[i]][, 20] + data_list_no_F[[i]][, 21]
+        data_list_no_F[[i]][, 29] <- data_list_no_F[[i]][, 29] + data_list_no_F[[i]][, 30]
+        colnames(data_list_no_F[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
+        data_list_no_F[[i]] <- data_list_no_F[[i]][, -c(15, 17, 19, 21, 30)]
+        
+      }
+      
+      fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 7), NA, "pelagic", "demersal",
+                      rep(NA, 2), rep("demersal", 2), rep("pelagic", 4), "sandeel", rep("demersal", 10),
+                      rep(NA, 2),
+                      #rep("demersal", 2), "pelagic",
+                      rep(NA,3),
+                      "shellfish", rep(NA,4), rep("shellfish", 2),
+                      rep(NA, 2), "shellfish", rep(NA, 11))
+      sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 4), rep(F, 6), rep(T, 2), rep(F, 2),
+                        T, rep(F, 9), T, F, T, rep(F, 26))
+      
+    }else{
+      
+      fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 11), NA, "pelagic", "demersal",
+                      rep(NA, 2), rep("demersal", 2), rep("pelagic", 5), "sandeel", rep("demersal", 10),
+                      rep(NA, 2),
+                      #rep("demersal", 2), "pelagic",
+                      rep(NA,3),
+                      "shellfish", rep(NA,4), rep("shellfish", 2),
+                      rep(NA, 2), "shellfish", rep(NA, 11))
+      sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 7), rep(F, 7), rep(T, 2), rep(F, 3),
+                        T, rep(F, 9), T, F, T, rep(F, 26))
+      
+    }
+    
+    for(i in 1:n_iter){
+      
+      data_list_MSY[[i]] <- rbind(data_list_MSY[[i]], fish_group)
+      data_list_MSY[[i]] <- rbind(data_list_MSY[[i]], sandeel_diet)
+      
+      data_list_half_MSY[[i]] <- rbind(data_list_half_MSY[[i]], fish_group)
+      data_list_half_MSY[[i]] <- rbind(data_list_half_MSY[[i]], sandeel_diet)
+      
+      data_list_no_F[[i]] <- rbind(data_list_no_F[[i]], fish_group)
+      data_list_no_F[[i]] <- rbind(data_list_no_F[[i]], sandeel_diet)
+      
+    }
+    
+    return(list(data_list_MSY = data_list_MSY, data_list_half_MSY = data_list_half_MSY,
+                data_list_no_F = data_list_no_F))
     
   }else{
     
-    fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 11), NA, "pelagic", "demersal",
-                    rep(NA, 2), rep("demersal", 2), rep("pelagic", 5), "sandeel", rep("demersal", 10),
-                    rep(NA, 2),
-                    #rep("demersal", 2), "pelagic",
-                    rep(NA,3),
-                    "shellfish", rep(NA,4), rep("shellfish", 2),
-                    rep(NA, 2), "shellfish", rep(NA, 11))
-    sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 7), rep(F, 7), rep(T, 2), rep(F, 3),
-                      T, rep(F, 9), T, F, T, rep(F, 26))
+    func_groups_output <- read.csv("C:\\Users\\adamg\\Google Drive\\Natural England project\\Previous report\\NorthSea_EwE_basic_estimates_functional_groups.csv")
+    func_groups_output <- func_groups_output[!is.na(func_groups_output[, 1]), ]
+    func_groups <- func_groups_output[, 2]
+    
+    data <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Base_model\\", output, ".csv"),
+                         skip = 9)
+    data[,-1] <- data[,-1] * 570000 # for both catch and biomass, the data need to be rescaled by area of North Sea considered, 570000km^2
+    data_list <- vector("list", length = n_iter)
+    data_list[[1]] <- data
+    colnames(data_list[[1]]) <- c("year", func_groups)
+    
+    for(i in 1:(n_iter - 1)){
+      
+      data_list[[i + 1]] <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\N.Sea_EwE_small_model_set\\EcoSampler\\Run_", i, "\\", output, ".csv"),
+                                         skip = 9)
+      colnames(data_list[[i + 1]]) <- c("year", func_groups)
+      data_list[[i + 1]][,-1] <- data_list[[i + 1]][,-1] * 570000
+      
+    }
+    
+    if(amalgamate){ # want to combine some functional groups given split into juvenile and adult 
+      
+      # want 13+14, 15+16, 17+18, 19+20, 28+29. remember column 1 is year, so need to add on one to each column
+      for(i in 1:n_iter){
+        
+        data_list[[i]][, 14] <- data_list[[i]][, 14] + data_list[[i]][, 15]
+        data_list[[i]][, 16] <- data_list[[i]][, 16] + data_list[[i]][, 17]
+        data_list[[i]][, 18] <- data_list[[i]][, 18] + data_list[[i]][, 19]
+        data_list[[i]][, 20] <- data_list[[i]][, 20] + data_list[[i]][, 21]
+        data_list[[i]][, 29] <- data_list[[i]][, 29] + data_list[[i]][, 30]
+        colnames(data_list[[i]])[c(14, 16, 18, 20, 29)] <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring")
+        data_list[[i]] <- data_list[[i]][, -c(15, 17, 19, 21, 30)]
+        
+      }
+      
+      fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 7), NA, "pelagic", "demersal",
+                      rep(NA, 2), rep("demersal", 2), rep("pelagic", 4), "sandeel", rep("demersal", 10),
+                      rep(NA, 2),
+                      #rep("demersal", 2), "pelagic",
+                      rep(NA,3),
+                      "shellfish", rep(NA,4), rep("shellfish", 2),
+                      rep(NA, 2), "shellfish", rep(NA, 11))
+      sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 4), rep(F, 6), rep(T, 2), rep(F, 2),
+                        T, rep(F, 9), T, F, T, rep(F, 26))
+      
+    }else{
+      
+      fish_group <- c(rep(NA, 6), rep("demersal", 3), NA, rep("demersal", 11), NA, "pelagic", "demersal",
+                      rep(NA, 2), rep("demersal", 2), rep("pelagic", 5), "sandeel", rep("demersal", 10),
+                      rep(NA, 2),
+                      #rep("demersal", 2), "pelagic",
+                      rep(NA,3),
+                      "shellfish", rep(NA,4), rep("shellfish", 2),
+                      rep(NA, 2), "shellfish", rep(NA, 11))
+      sandeel_diet <- c(NA, rep(F, 9), T, F, rep(T, 7), rep(F, 7), rep(T, 2), rep(F, 3),
+                        T, rep(F, 9), T, F, T, rep(F, 26))
+      
+    }
+    
+    for(i in 1:n_iter){
+      
+      data_list[[i]] <- rbind(data_list[[i]], fish_group)
+      data_list[[i]] <- rbind(data_list[[i]], sandeel_diet)
+      
+    }
+    
+    
+    return(data_list = data_list)
     
   }
-  
-  for(i in 1:n_iter){
-    
-    data_list_MSY[[i]] <- rbind(data_list_MSY[[i]], fish_group)
-    data_list_MSY[[i]] <- rbind(data_list_MSY[[i]], sandeel_diet)
-    
-    data_list_half_MSY[[i]] <- rbind(data_list_half_MSY[[i]], fish_group)
-    data_list_half_MSY[[i]] <- rbind(data_list_half_MSY[[i]], sandeel_diet)
-    
-    data_list_no_F[[i]] <- rbind(data_list_no_F[[i]], fish_group)
-    data_list_no_F[[i]] <- rbind(data_list_no_F[[i]], sandeel_diet)
-    
-  }
-  
-  return(list(data_list_MSY = data_list_MSY, data_list_half_MSY = data_list_half_MSY,
-              data_list_no_F = data_list_no_F))
   
 }
 
