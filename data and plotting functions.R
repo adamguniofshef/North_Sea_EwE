@@ -342,29 +342,29 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_sndl[project_years], type = "l",
          ylab = output, xlab = "Project Year",
          ylim = c(plot_min_MSY, plot_max_MSY),
-         col = "blue")
+         col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_plgc[project_years], lty = 1, col = "red")
+          data_mean_MSY_plgc[project_years], lty = 1, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc[1,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc[1,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc[2,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc[2,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_dmrsl[project_years], lty = 1, col = "green")
+          data_mean_MSY_dmrsl[project_years], lty = 1, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl[1,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl[1,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl[2,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl[2,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_shllfsh[project_years], lty = 1, col = "orange")
+          data_mean_MSY_shllfsh[project_years], lty = 1, col = "orange", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_shllfsh[1,project_years], lty = 2, col = "orange")
+          data_quantiles_MSY_shllfsh[1,project_years], lty = 2, col = "orange", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_shllfsh[2,project_years], lty = 2, col = "orange")
+          data_quantiles_MSY_shllfsh[2,project_years], lty = 2, col = "orange", lwd = 2)
     
     # Second plot, Figure 7.2 --- Baseline vs no sandeel fishing
     
@@ -378,54 +378,54 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_sndl[project_years], type = "l",
          ylab = output, xlab = "Project Year",
          ylim = c(min(plot_min_MSY, plot_min_no_F), max(plot_max_MSY, plot_max_no_F)),
-         col = "blue")
+         col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_plgc[project_years], lty = 1, col = "red")
+          data_mean_MSY_plgc[project_years], lty = 1, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc[1,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc[1,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc[2,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc[2,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_dmrsl[project_years], lty = 1, col = "green")
+          data_mean_MSY_dmrsl[project_years], lty = 1, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl[1,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl[1,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl[2,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl[2,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_shllfsh[project_years], lty = 1, col = "orange")
+          data_mean_MSY_shllfsh[project_years], lty = 1, col = "orange", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_shllfsh[1,project_years], lty = 2, col = "orange")
+          data_quantiles_MSY_shllfsh[1,project_years], lty = 2, col = "orange", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_shllfsh[2,project_years], lty = 2, col = "orange")
+          data_quantiles_MSY_shllfsh[2,project_years], lty = 2, col = "orange", lwd = 2)
     
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_sndl[project_years], lty = 3, col = "blue")
+          data_mean_no_F_sndl[project_years], lty = 3, col = "blue", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_sndl[1,project_years], lty = 4, col = "blue")
+          data_quantiles_no_F_sndl[1,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_sndl[2,project_years], lty = 4, col = "blue")
+          data_quantiles_no_F_sndl[2,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_plgc[project_years], lty = 3, col = "red")
+          data_mean_no_F_plgc[project_years], lty = 3, col = "red", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_plgc[1,project_years], lty = 4, col = "red")
+          data_quantiles_no_F_plgc[1,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_plgc[2,project_years], lty = 4, col = "red")
+          data_quantiles_no_F_plgc[2,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_dmrsl[project_years], lty = 3, col = "green")
+          data_mean_no_F_dmrsl[project_years], lty = 3, col = "green", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_dmrsl[1,project_years], lty = 4, col = "green")
+          data_quantiles_no_F_dmrsl[1,project_years], lty = 4, col = "green", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_dmrsl[2,project_years], lty = 4, col = "green")
+          data_quantiles_no_F_dmrsl[2,project_years], lty = 4, col = "green", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_shllfsh[project_years], lty = 3, col = "orange")
+          data_mean_no_F_shllfsh[project_years], lty = 3, col = "orange", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_shllfsh[1,project_years], lty = 4, col = "orange")
+          data_quantiles_no_F_shllfsh[1,project_years], lty = 4, col = "orange", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_shllfsh[2,project_years], lty = 4, col = "orange")
+          data_quantiles_no_F_shllfsh[2,project_years], lty = 4, col = "orange", lwd = 2)
     
     # Third plot, but Figure 7.4 (Figure 7.3 in sandeel_diet) --- baseline vs reduced
     
@@ -439,54 +439,54 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_sndl[project_years], type = "l",
          ylab = output, xlab = "Project Year",
          ylim = c(min(plot_min_MSY, plot_min_half_MSY), max(plot_max_MSY, plot_max_half_MSY)),
-         col = "blue")
+         col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_plgc[project_years], lty = 1, col = "red")
+          data_mean_MSY_plgc[project_years], lty = 1, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc[1,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc[1,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc[2,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc[2,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_dmrsl[project_years], lty = 1, col = "green")
+          data_mean_MSY_dmrsl[project_years], lty = 1, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl[1,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl[1,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl[2,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl[2,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_shllfsh[project_years], lty = 1, col = "orange")
+          data_mean_MSY_shllfsh[project_years], lty = 1, col = "orange", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_shllfsh[1,project_years], lty = 2, col = "orange")
+          data_quantiles_MSY_shllfsh[1,project_years], lty = 2, col = "orange", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_shllfsh[2,project_years], lty = 2, col = "orange")
+          data_quantiles_MSY_shllfsh[2,project_years], lty = 2, col = "orange", lwd = 2)
     
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_sndl[project_years], lty = 3, col = "blue")
+          data_mean_half_MSY_sndl[project_years], lty = 3, col = "blue", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_sndl[1,project_years], lty = 4, col = "blue")
+          data_quantiles_half_MSY_sndl[1,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_sndl[2,project_years], lty = 4, col = "blue")
+          data_quantiles_half_MSY_sndl[2,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_plgc[project_years], lty = 3, col = "red")
+          data_mean_half_MSY_plgc[project_years], lty = 3, col = "red", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_plgc[1,project_years], lty = 4, col = "red")
+          data_quantiles_half_MSY_plgc[1,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_plgc[2,project_years], lty = 4, col = "red")
+          data_quantiles_half_MSY_plgc[2,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_dmrsl[project_years], lty = 3, col = "green")
+          data_mean_half_MSY_dmrsl[project_years], lty = 3, col = "green", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_dmrsl[1,project_years], lty = 4, col = "green")
+          data_quantiles_half_MSY_dmrsl[1,project_years], lty = 4, col = "green", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_dmrsl[2,project_years], lty = 4, col = "green")
+          data_quantiles_half_MSY_dmrsl[2,project_years], lty = 4, col = "green", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_shllfsh[project_years], lty = 3, col = "orange")
+          data_mean_half_MSY_shllfsh[project_years], lty = 3, col = "orange", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_shllfsh[1,project_years], lty = 4, col = "orange")
+          data_quantiles_half_MSY_shllfsh[1,project_years], lty = 4, col = "orange", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_shllfsh[2,project_years], lty = 4, col = "orange")
+          data_quantiles_half_MSY_shllfsh[2,project_years], lty = 4, col = "orange", lwd = 2)
     
   }
   
@@ -601,42 +601,42 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_sndl[project_years], type = "l",
          ylab = output, xlab = "Project Year",
          ylim = c(min(plot_min_MSY, plot_min_no_F), max(plot_max_MSY, plot_max_no_F)),
-         col = "blue")
+         col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_plgc_eat_sndl[project_years], lty = 1, col = "red")
+          data_mean_MSY_plgc_eat_sndl[project_years], lty = 1, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc_eat_sndl[1,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc_eat_sndl[1,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc_eat_sndl[2,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc_eat_sndl[2,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_dmrsl_eat_sndl[project_years], lty = 1, col = "green")
+          data_mean_MSY_dmrsl_eat_sndl[project_years], lty = 1, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl_eat_sndl[1,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl_eat_sndl[1,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl_eat_sndl[2,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl_eat_sndl[2,project_years], lty = 2, col = "green", lwd = 2)
     
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_sndl[project_years], lty = 3, col = "blue")
+          data_mean_no_F_sndl[project_years], lty = 3, col = "blue", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_sndl[1,project_years], lty = 4, col = "blue")
+          data_quantiles_no_F_sndl[1,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_sndl[2,project_years], lty = 4, col = "blue")
+          data_quantiles_no_F_sndl[2,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_plgc_eat_sndl[project_years], lty = 3, col = "red")
+          data_mean_no_F_plgc_eat_sndl[project_years], lty = 3, col = "red", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_plgc_eat_sndl[1,project_years], lty = 4, col = "red")
+          data_quantiles_no_F_plgc_eat_sndl[1,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_plgc_eat_sndl[2,project_years], lty = 4, col = "red")
+          data_quantiles_no_F_plgc_eat_sndl[2,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_mean_no_F_dmrsl_eat_sndl[project_years], lty = 3, col = "green")
+          data_mean_no_F_dmrsl_eat_sndl[project_years], lty = 3, col = "green", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_dmrsl_eat_sndl[1,project_years], lty = 4, col = "green")
+          data_quantiles_no_F_dmrsl_eat_sndl[1,project_years], lty = 4, col = "green", lwd = 2)
     lines(as.numeric(data_list_no_F[[1]]$year[project_years]) - 2018,
-          data_quantiles_no_F_dmrsl_eat_sndl[2,project_years], lty = 4, col = "green")
+          data_quantiles_no_F_dmrsl_eat_sndl[2,project_years], lty = 4, col = "green", lwd = 2)
     
     # Second plot, Figure 7.5 --- baseline vs reduced sandeel fishing
     
@@ -650,42 +650,42 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_sndl[project_years], type = "l",
          ylab = output, xlab = "Project Year",
          ylim = c(min(plot_min_MSY, plot_min_half_MSY), max(plot_max_MSY, plot_max_half_MSY)),
-         col = "blue")
+         col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[1,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue")
+          data_quantiles_MSY_sndl[2,project_years], lty = 2, col = "blue", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_plgc_eat_sndl[project_years], lty = 1, col = "red")
+          data_mean_MSY_plgc_eat_sndl[project_years], lty = 1, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc_eat_sndl[1,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc_eat_sndl[1,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_plgc_eat_sndl[2,project_years], lty = 2, col = "red")
+          data_quantiles_MSY_plgc_eat_sndl[2,project_years], lty = 2, col = "red", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_MSY_dmrsl_eat_sndl[project_years], lty = 1, col = "green")
+          data_mean_MSY_dmrsl_eat_sndl[project_years], lty = 1, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl_eat_sndl[1,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl_eat_sndl[1,project_years], lty = 2, col = "green", lwd = 2)
     lines(as.numeric(data_list_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_MSY_dmrsl_eat_sndl[2,project_years], lty = 2, col = "green")
+          data_quantiles_MSY_dmrsl_eat_sndl[2,project_years], lty = 2, col = "green", lwd = 2)
     
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_sndl[project_years], lty = 3, col = "blue")
+          data_mean_half_MSY_sndl[project_years], lty = 3, col = "blue", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_sndl[1,project_years], lty = 4, col = "blue")
+          data_quantiles_half_MSY_sndl[1,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_sndl[2,project_years], lty = 4, col = "blue")
+          data_quantiles_half_MSY_sndl[2,project_years], lty = 4, col = "blue", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_plgc_eat_sndl[project_years], lty = 3, col = "red")
+          data_mean_half_MSY_plgc_eat_sndl[project_years], lty = 3, col = "red", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_plgc_eat_sndl[1,project_years], lty = 4, col = "red")
+          data_quantiles_half_MSY_plgc_eat_sndl[1,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_plgc_eat_sndl[2,project_years], lty = 4, col = "red")
+          data_quantiles_half_MSY_plgc_eat_sndl[2,project_years], lty = 4, col = "red", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_mean_half_MSY_dmrsl_eat_sndl[project_years], lty = 3, col = "green")
+          data_mean_half_MSY_dmrsl_eat_sndl[project_years], lty = 3, col = "green", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_dmrsl_eat_sndl[1,project_years], lty = 4, col = "green")
+          data_quantiles_half_MSY_dmrsl_eat_sndl[1,project_years], lty = 4, col = "green", lwd = 2)
     lines(as.numeric(data_list_half_MSY[[1]]$year[project_years]) - 2018,
-          data_quantiles_half_MSY_dmrsl_eat_sndl[2,project_years], lty = 4, col = "green")
+          data_quantiles_half_MSY_dmrsl_eat_sndl[2,project_years], lty = 4, col = "green", lwd = 2)
     
     
   }
@@ -745,25 +745,25 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_sf_sbrds[project_years], type = "l",
          ylab = paste0(output, ", surface-feeding seabirds"), xlab = "Project Year",
          ylim = c(plot_min_sf_sbrds, plot_max_sf_sbrds),
-         col = "darkgreen")
+         col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_sf_sbrds[1,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_sf_sbrds[1,project_years], lty = 2, col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_sf_sbrds[2,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_sf_sbrds[2,project_years], lty = 2, col = "darkgreen", lwd = 2)
     
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_half_MSY_sf_sbrds[project_years], lty = 1, col = "purple")
+          data_mean_half_MSY_sf_sbrds[project_years], lty = 1, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_sf_sbrds[1,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_sf_sbrds[1,project_years], lty = 2, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_sf_sbrds[2,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_sf_sbrds[2,project_years], lty = 2, col = "purple", lwd = 2)
     
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_no_F_sf_sbrds[project_years], lty = 1, col = "deepskyblue4")
+          data_mean_no_F_sf_sbrds[project_years], lty = 1, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_sf_sbrds[1,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_sf_sbrds[1,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_sf_sbrds[2,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_sf_sbrds[2,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     
     # Second plot, Figure 7.6b) diving seabirds all scenarios
     
@@ -778,25 +778,25 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_dvng_sbrds[project_years], type = "l",
          ylab = paste0(output, ", diving seabirds"), xlab = "Project Year",
          ylim = c(plot_min_dvng_sbrds, plot_max_dvng_sbrds),
-         col = "darkgreen")
+         col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_dvng_sbrds[1,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_dvng_sbrds[1,project_years], lty = 2, col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_dvng_sbrds[2,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_dvng_sbrds[2,project_years], lty = 2, col = "darkgreen", lwd = 2)
     
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_half_MSY_dvng_sbrds[project_years], lty = 1, col = "purple")
+          data_mean_half_MSY_dvng_sbrds[project_years], lty = 1, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_dvng_sbrds[1,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_dvng_sbrds[1,project_years], lty = 2, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_dvng_sbrds[2,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_dvng_sbrds[2,project_years], lty = 2, col = "purple", lwd = 2)
     
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_no_F_dvng_sbrds[project_years], lty = 1, col = "deepskyblue4")
+          data_mean_no_F_dvng_sbrds[project_years], lty = 1, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_dvng_sbrds[1,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_dvng_sbrds[1,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_dvng_sbrds[2,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_dvng_sbrds[2,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     
     
   }
@@ -862,50 +862,50 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_bln_whls[project_years], type = "l",
          ylab = paste0(output, ", baleen whales"), xlab = "Project Year",
          ylim = c(plot_min_bln_whls, plot_max_bln_whls),
-         col = "darkgreen")
+         col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_bln_whls[1,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_bln_whls[1,project_years], lty = 2, col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_bln_whls[2,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_bln_whls[2,project_years], lty = 2, col = "darkgreen", lwd = 2)
     
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_half_MSY_bln_whls[project_years], lty = 1, col = "purple")
+          data_mean_half_MSY_bln_whls[project_years], lty = 1, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_bln_whls[1,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_bln_whls[1,project_years], lty = 2, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_bln_whls[2,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_bln_whls[2,project_years], lty = 2, col = "purple", lwd = 2)
     
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_no_F_bln_whls[project_years], lty = 1, col = "deepskyblue4")
+          data_mean_no_F_bln_whls[project_years], lty = 1, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_bln_whls[1,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_bln_whls[1,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_bln_whls[2,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_bln_whls[2,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     
     
     plot((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
          data_mean_MSY_tthd_whls[project_years], type = "l",
          ylab = paste0(output, ", toothed whales"), xlab = "Project Year",
          ylim = c(plot_min_tthd_whls, plot_max_tthd_whls),
-         col = "darkgreen")
+         col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_tthd_whls[1,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_tthd_whls[1,project_years], lty = 2, col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_tthd_whls[2,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_tthd_whls[2,project_years], lty = 2, col = "darkgreen", lwd = 2)
     
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_half_MSY_tthd_whls[project_years], lty = 1, col = "purple")
+          data_mean_half_MSY_tthd_whls[project_years], lty = 1, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_tthd_whls[1,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_tthd_whls[1,project_years], lty = 2, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_tthd_whls[2,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_tthd_whls[2,project_years], lty = 2, col = "purple", lwd = 2)
     
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_no_F_tthd_whls[project_years], lty = 1, col = "deepskyblue4")
+          data_mean_no_F_tthd_whls[project_years], lty = 1, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_tthd_whls[1,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_tthd_whls[1,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_tthd_whls[2,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_tthd_whls[2,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     
     
   }
@@ -945,25 +945,25 @@ North_Sea_EwE_plot <- function(data_list_MSY, data_list_half_MSY,
          data_mean_MSY_seals[project_years], type = "l",
          ylab = paste0(output, ", seals"), xlab = "Project Year",
          ylim = c(plot_min_seals, plot_max_seals),
-         col = "darkgreen")
+         col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_seals[1,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_seals[1,project_years], lty = 2, col = "darkgreen", lwd = 2)
     lines((as.numeric(data_list_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_MSY_seals[2,project_years], lty = 2, col = "darkgreen")
+          data_quantiles_MSY_seals[2,project_years], lty = 2, col = "darkgreen", lwd = 2)
     
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_half_MSY_seals[project_years], lty = 1, col = "purple")
+          data_mean_half_MSY_seals[project_years], lty = 1, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_seals[1,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_seals[1,project_years], lty = 2, col = "purple", lwd = 2)
     lines((as.numeric(data_list_half_MSY[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_half_MSY_seals[2,project_years], lty = 2, col = "purple")
+          data_quantiles_half_MSY_seals[2,project_years], lty = 2, col = "purple", lwd = 2)
     
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_mean_no_F_seals[project_years], lty = 1, col = "deepskyblue4")
+          data_mean_no_F_seals[project_years], lty = 1, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_seals[1,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_seals[1,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
     lines((as.numeric(data_list_no_F[[1]]$year[1:total_years]) - 2018)[project_years],
-          data_quantiles_no_F_seals[2,project_years], lty = 2, col = "deepskyblue4")
+          data_quantiles_no_F_seals[2,project_years], lty = 2, col = "deepskyblue4", lwd = 2)
   }
   
 }

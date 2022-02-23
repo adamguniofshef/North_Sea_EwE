@@ -35,10 +35,11 @@ MSY_NCBS <- NCBS(data_list_biomass = biomass_annual_3_scenarios$data_list_MSY,
 
 half_MSY_NCBS <- NCBS(data_list_biomass = biomass_annual_3_scenarios$data_list_half_MSY,
                  data_list_catch = catch_annual_3_scenarios$data_list_half_MSY, n_iter = 40)
-
+round(half_MSY_NCBS$total_monetary_benefit_PV60_quantiles)
 
 no_F_NCBS <- NCBS(data_list_biomass = biomass_annual_3_scenarios$data_list_no_F,
                  data_list_catch = catch_annual_3_scenarios$data_list_no_F, n_iter = 40)
+round(no_F_NCBS$total_monetary_benefit_PV60_quantiles)
 
 MSY_vs_half_MSY_NCBS <- NCBS_compare(NCBS_1 = MSY_NCBS, NCBS_2 = half_MSY_NCBS)
 
