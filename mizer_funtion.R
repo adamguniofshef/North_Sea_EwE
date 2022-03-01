@@ -1,6 +1,7 @@
 ## Running mizer
 
 ## Requires an old version of mizer
+install.packages("devtools")
 require(devtools)
 install_version("mizer", version = "1.0.1", repos = "http://cran.us.r-project.org")
 

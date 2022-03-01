@@ -1,4 +1,8 @@
 ###
+
+install.packages("FishSUMS8_1.0.tar.gz", repos=NULL, type="source")
+install.packages("tidyverse")
+
 library(FishSUMS8)
 library(tidyverse)
 library(scales)

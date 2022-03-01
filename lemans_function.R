@@ -16,6 +16,28 @@ get_lemans <- function(new_fs, n_years=31){
   LeMANS_outputs <- getting_mse(temp, lemans_runs1, n_years=n_years)
 }
 
+getting_mse <- function(targetF,lemans_runs1,n_years=31){
+  #lemans_runs1 <- lemans_runs[[1]]
+  SSB1 <- matrix(0, n_years, 9)
+  Yield1 <- matrix(0, n_years, 9)
+  Fs <- targetF
+  
+  for (yr in 1:n_years) {
+    ### get the next F
+    ### xhat[1:7] is the current SSB
+    ### run with new F
+    lemans_runs1 <- LeMans1(lemans_runs1, Fs=Fs)
+    ssb_out <- (log(lemans_runs1$SSB)-log(1e6))[
+      c(2,3,7,12,10,15,17,20,21)] ### calculate the next SSB
+    SSB1[yr, ] <- ssb_out
+    
+    yield_out <- (log(colSums(lemans_runs1$Catch))-log(1e6))[
+      c(2,3,7,12,10,15,17,20,21)] ### calculate the next yield
+    Yield1[yr, ] <- yield_out
+  }
+  return(list(SSB=SSB1, Yield = Yield1))
+}
+
 test_run_lemans <- get_lemans(new_fs = rep(0, 9), n_years = 31)
 
 test_run_lemans$SSB

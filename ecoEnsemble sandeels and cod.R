@@ -14,20 +14,20 @@ sourceCpp('calc_M2.cpp')
 # Running the 3 non-EwE simulators under FMSY for each species up until 2100
 
 FMSY_mizer <- c(0.3, 0.7, 0.26, 0.172, 0.207, 0.21, 0.194, 0.31, 0.363)
-mizer_FMSY <- get_mizer(Fs = FMSY_mizer, theta = theta, years_post_data = 81, simulation_end_date = 2100)
+mizer_FMSY <- get_mizer(Fs = FMSY_mizer, theta = theta, years_post_data = 58, simulation_end_date = 2077)
 
 # FishSUMS --- sandeel, norway pout, herring, whiting,
 # plaice, haddock, cod and saithe
 
 FMSY_FishSUMS <- c(0.3, 0.7, 0.26, 0.172, 0.21, 0.194, 0.31, 0.363)
 fishSUMS_FMSY <- get_fishsums(Fs = FMSY_FishSUMS, theta = theta, spec_nam = spec_nam,
-                              simulation_end_date = 2100)
+                              simulation_end_date = 2077)
 
 # LeMans --- 1) Sandeel, 2) N. pout, 3) Herring, 4) Whiting,
 # 5) Sole, 6) Plaice 7) Haddock 8) Cod 9) Saithe
 
 FMSY_LeMans <- c(0.3, 0.7, 0.26, 0.172, 0.207, 0.21, 0.194, 0.31, 0.363)
-LeMans_FMSY <- get_lemans(new_fs = FMSY_LeMans, n_years = 115)
+LeMans_FMSY <- get_lemans(new_fs = FMSY_LeMans, n_years = 92)
 
 
 NS_biomass <- read.csv(paste0("C:\\Users\\adamg\\Google Drive\\Natural England project\\North_Sea_EwE\\NS_EwE_biomass_TS_updated.csv"),
@@ -73,7 +73,7 @@ for(i in 1:40){
 
 # everything in tonnes, so just need to take log
 
-EwE_FMSY_Sandeels_log <- log(EwE_FMSY_Sandeels)
+EwE_FMSY_Sandeels_log <- log(EwE_FMSY_Sandeels[28:87, ])
 EwE_FMSY_Sandeels_log_mean <- apply(EwE_FMSY_Sandeels_log, 1, mean) # mean over 40 iters
 EwE_FMSY_Sandeels_log_var <- apply(EwE_FMSY_Sandeels_log, 1, var) # var over 40 iters
 EwE_FMSY_Sandeels_log_var_mean <- mean(EwE_FMSY_Sandeels_log_var)
@@ -91,11 +91,11 @@ for(i in 1:40){
 
 # everything in tonnes, so just need to take log
 
-EwE_FMSY_cod_log <- log(EwE_FMSY_cod)
+EwE_FMSY_cod_log <- log(EwE_FMSY_cod[28:87, ])
 EwE_FMSY_cod_log_mean <- apply(EwE_FMSY_cod_log, 1, mean) # mean over 40 iters
-EwE_FMSY_Sandeel_cod_log_cov <- rep(NA, 110)
+EwE_FMSY_Sandeel_cod_log_cov <- rep(NA, length(28:87))
 
-for(j in 1:110){
+for(j in 1:length(28:87)){
   
   EwE_FMSY_Sandeel_cod_log_cov[j] <- cov(EwE_FMSY_Sandeels_log[j, ], EwE_FMSY_cod_log[j, ])
   
@@ -114,18 +114,18 @@ rownames(EwE_FMSY_Sandeel_cod_covariance_mat) <- c("Sandeel", "Cod")
 
 EwE_FMSY_Sandeel_cod_log_mean <- as.data.frame(cbind(EwE_FMSY_Sandeels_log_mean, EwE_FMSY_cod_log_mean))
 colnames(EwE_FMSY_Sandeel_cod_log_mean) <- c("Sandeel", "Cod")
-rownames(EwE_FMSY_Sandeel_cod_log_mean) <- 1991:2100
+rownames(EwE_FMSY_Sandeel_cod_log_mean) <- 2018:2077
 
 
 mizer_FMSY_sandeels_cod <- as.data.frame(mizer_FMSY$SSB[, c(2, 11)])
-
+fishSUMS_FMSY_log_tonnes <- log(fishSUMS_FMSY$SSB * 1000)
 fishSUMS_FMSY_log_tonnes[, 12] <- exp(fishSUMS_FMSY_log_tonnes[, 12])/1000
 
 fishSUMS_FMSY_sandeels_cod <- as.data.frame(fishSUMS_FMSY_log_tonnes[, c(9, 1)])
 rownames(fishSUMS_FMSY_sandeels_cod) <- fishSUMS_FMSY_log_tonnes[, 12]
 
 LeMans_FMSY_sandeels_cod <- as.data.frame(LeMans_FMSY$SSB[, c(1, 8)])
-rownames(LeMans_FMSY_sandeels_cod) <- 1986:2100
+rownames(LeMans_FMSY_sandeels_cod) <- 1986:2077
 colnames(LeMans_FMSY_sandeels_cod) <- c("Sandeel", "Cod")
 
 
@@ -176,7 +176,8 @@ FMSY_Ensemble_sandeel_cod_fit <- fit_ensemble_model(observations = list(NS_bioma
                                                full_sample = FALSE)
 
 FMSY_Ensemble_sandeel_cod_sample <- generate_sample(FMSY_Ensemble_sandeel_cod_fit, num_samples = 2000)
-EcoEnsemble:::get_mle(FMSY_Ensemble_sandeel_cod_sample)
+EcoEnsemble:::plot.EnsembleSample(FMSY_Ensemble_sandeel_cod_sample, variable = 2,
+                                  quantiles = c(0.025, 0.975))
 
 gen_sample(FMSY_Ensemble_sandeel_cod_sample)
 EcoEnsemble:::get_transformed_data(FMSY_Ensemble_sandeel_cod_sample)
